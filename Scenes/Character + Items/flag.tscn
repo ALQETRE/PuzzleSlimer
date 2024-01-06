@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dp3xulouem0lj"]
+
+[ext_resource type="Script" path="res://Scripts/Flag.gd" id="1_sidu3"]
+[ext_resource type="Texture2D" uid="uid://dieeidp7mvsfn" path="res://Assets/flag.png" id="2_rf5ci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vxt1s"]
+size = Vector2(12, 15)
+
+[node name="Flag" type="CharacterBody2D"]
+scale = Vector2(1.8, 1.8)
+collision_layer = 2
+script = ExtResource("1_sidu3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_rf5ci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_vxt1s")

@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://dl8nkehic5qrm"]
+
+[ext_resource type="Script" path="res://Scripts/Split_bar.gd" id="1_4sqya"]
+[ext_resource type="Texture2D" uid="uid://bujesb24idlp4" path="res://Assets/Split_bar.png" id="1_l88fn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6mqqi"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 0, 46, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xa46r"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 8, 46, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tq7qv"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 16, 46, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3dml"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 24, 46, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m36s1"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 32, 46, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8s8gp"]
+atlas = ExtResource("1_l88fn")
+region = Rect2(0, 40, 46, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bmy03"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mqqi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xa46r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tq7qv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g3dml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m36s1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8s8gp")
+}],
+"loop": true,
+"name": &"Split_bar",
+"speed": 5.0
+}]
+
+[node name="Split_bar" type="CanvasLayer"]
+visible = false
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(8, 8)
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_bmy03")
+animation = &"Split_bar"
+centered = false
+script = ExtResource("1_4sqya")
