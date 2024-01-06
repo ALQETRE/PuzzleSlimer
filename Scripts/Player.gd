@@ -37,7 +37,8 @@ func _ready():
 	Global.global_player_activaion.connect(global_activation)
 	connect("transition_signal", camera_transition.transition, 3)
 
-var floor
+var floor = false
+var ceil
 var direction
 func _physics_process(delta):
 	if not in_use:
@@ -45,12 +46,9 @@ func _physics_process(delta):
 		direction = 0
 		get_node("Camera2D").enabled = false
 	else:
-		floor = is_on_floor()
 		direction = Input.get_axis("Left", "Right")
 		
 		if Input.is_action_just_pressed("Use"):
-			slime_split()
-		elif Input.is_action_just_pressed("Conect"):
 			slime_connect()
 		
 		if not split:
@@ -64,6 +62,8 @@ func _physics_process(delta):
 	
 	gravity_process()
 	move_and_slide()
+	floor = is_on_floor()
+	ceil = is_on_ceiling()
 
 func gravity_process():
 	if not floor:
@@ -104,14 +104,16 @@ func update_animations():
 	
 	anim_tree["parameters/conditions/jump"] = jumping
 
-func slime_split():
-	if not (floor and velocity.x == 0 and not split and not connecting and available_splits > 0):
+func slime_split(spike):
+	if not(not split and not connecting and available_splits > 0):
 		return
+	velocity.x = 0
 	
 	available_splits -= 1
 		
 	split = true
 	anim_tree["parameters/conditions/split"] = split
+	spike.queue_free()
 	await get_tree().create_timer(0.4).timeout
 	anim_tree["parameters/conditions/split"] = false
 	
@@ -199,8 +201,9 @@ func connect_area_entered(body):
 		if body.my_type == "player":
 			bodies_in_connect_area.append(body)
 		elif body.my_type == "blob":
-			await floor and velocity.x == 0 and not split and not connecting
-			
+			if not(floor and not split and not connecting):
+				return
+			velocity.x = 0
 			
 			connecting = true
 			available_splits += 1
@@ -221,7 +224,10 @@ func connect_area_entered(body):
 			
 			await get_tree().create_timer(0.3).timeout
 			connecting = false
-
+			
+	if body.my_type == "spike":
+		slime_split(body)
+			
 	if body.my_type == "flag":
 		if snappedf(body.scale[0], 0.1) == Global.max_size[Global.levels.find(get_tree())]:
 			if Global.levels.find(get_tree()) + 1 <= Global.levels.size():
