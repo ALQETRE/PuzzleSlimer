@@ -24,7 +24,7 @@ signal transition_signal
 var right
 var run
 var idle
-var jumping
+var jumping = false
 var split
 var connecting
 
@@ -34,11 +34,12 @@ func _ready():
 	if not Global.active_player:
 		Global.active_player = self
 		available_splits = 0
+		split = false
+		connecting = false
 	Global.global_player_activaion.connect(global_activation)
 	connect("transition_signal", camera_transition.transition, 3)
 
 var floor = false
-var ceil
 var direction
 func _physics_process(delta):
 	if not in_use:
@@ -63,13 +64,15 @@ func _physics_process(delta):
 	gravity_process()
 	move_and_slide()
 	floor = is_on_floor()
-	ceil = is_on_ceiling()
 
 func gravity_process():
 	if not floor:
 		velocity.y += gravity
 
 func move():
+	if floor:
+		jumping = false
+		velocity.y = 0
 	if Input.is_action_pressed("Jump") and floor:
 		velocity.y = -jump
 		jumping = true
@@ -108,6 +111,9 @@ func slime_split(spike):
 	if not(not split and not connecting and available_splits > 0):
 		return
 	velocity.x = 0
+	
+	anim_tree["parameters/conditions/run"] = false
+	anim_tree["parameters/conditions/idle"] = true
 	
 	available_splits -= 1
 		
@@ -180,6 +186,7 @@ func slime_connect():
 	new_player.set_script(load("res://Scripts/Player.gd"))
 	new_player.available_splits = available_splits
 	Global.active_player = new_player
+	new_player.connecting = false
 	get_parent().add_child(new_player)
 	
 	transition_signal.emit(self, Global.active_player, 0.3)
@@ -188,9 +195,7 @@ func slime_connect():
 	self.queue_free()
 	
 	await get_tree().create_timer(0.3).timeout
-	connecting = false
-	
-	
+
 	
 
 

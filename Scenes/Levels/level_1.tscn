@@ -20,7 +20,7 @@ texture = ExtResource("2_v0xt6")
 0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_vl541"]
-physics_layer_0/collision_layer = 3
+physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_icrgw")
 
@@ -30,7 +30,7 @@ metadata/_edit_horizontal_guides_ = [-474.0]
 [node name="Players" type="Node2D" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("1_joaht")]
-position = Vector2(23, -26)
+position = Vector2(110, -241)
 
 [node name="TileMap" type="TileMap" parent="."]
 texture_filter = 1

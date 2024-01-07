@@ -54,6 +54,12 @@ Use={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Floor"
+2d_physics/layer_2="Items"
+2d_physics/layer_3="Player"
+
 [rendering]
 
 renderer/rendering_method="mobile"
