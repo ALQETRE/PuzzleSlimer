@@ -3,6 +3,6 @@
 [ext_resource type="Script" path="res://Scripts/Camera Transition.gd" id="1_q1mvk"]
 
 [node name="Camera Transition" type="Camera2D"]
-zoom = Vector2(5, 5)
+zoom = Vector2(4, 4)
 position_smoothing_enabled = true
 script = ExtResource("1_q1mvk")

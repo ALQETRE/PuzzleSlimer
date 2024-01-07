@@ -4,7 +4,7 @@ extends CharacterBody2D
 
 @export var init_speed : int = 90
 @export var init_jump : int = 360
-@export var init_gravity : int = 16.2
+@export var init_gravity : int = 16
 
 @onready var speed = init_speed * scale.x / 1.8
 @onready var jump = init_jump * scale.x / 1.8
@@ -52,6 +52,9 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("Use"):
 			slime_connect()
 		
+		if floor:
+			velocity.y = 0
+			jumping = false
 		if not split:
 			move()
 		else:
@@ -70,9 +73,7 @@ func gravity_process():
 		velocity.y += gravity
 
 func move():
-	if floor:
-		jumping = false
-		velocity.y = 0
+	
 	if Input.is_action_pressed("Jump") and floor:
 		velocity.y = -jump
 		jumping = true
@@ -206,7 +207,7 @@ func connect_area_entered(body):
 		if body.my_type == "player":
 			bodies_in_connect_area.append(body)
 		elif body.my_type == "blob":
-			if not(floor and not split and not connecting):
+			if not(not split and not connecting):
 				return
 			velocity.x = 0
 			
@@ -234,6 +235,11 @@ func connect_area_entered(body):
 		slime_split(body)
 			
 	if body.my_type == "flag":
-		if snappedf(body.scale[0], 0.1) == Global.max_size[Global.levels.find(get_tree())]:
+		if snappedf(body.scale[0], 0.1) == snappedf(Global.max_size[Global.levels.find(get_tree())], 0.1):
 			if Global.levels.find(get_tree()) + 1 <= Global.levels.size():
 				var next_level = Global.levels[Global.levels.find(get_tree()) + 1]
+			print("Done")
+
+
+func connect_area_exited(body):
+	bodies_in_connect_area.erase(body)
