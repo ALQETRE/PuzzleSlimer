@@ -4,5 +4,6 @@
 
 [node name="Camera Transition" type="Camera2D"]
 zoom = Vector2(4, 4)
+limit_smoothed = true
 position_smoothing_enabled = true
 script = ExtResource("1_q1mvk")

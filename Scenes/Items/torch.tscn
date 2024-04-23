@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://dcmcu8uvwnv23"]
+
+[ext_resource type="Texture2D" uid="uid://bwwkuiklxsfv1" path="res://Assets/torch.png" id="1_bg5cn"]
+[ext_resource type="Script" path="res://Scripts/torch.gd" id="2_r8lxn"]
+
+[sub_resource type="Gradient" id="Gradient_mkvkb"]
+offsets = PackedFloat32Array(0, 0.747748)
+colors = PackedColorArray(1, 0.705167, 0.39, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lug4d"]
+gradient = SubResource("Gradient_mkvkb")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_jq8ue"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s4k2i"]
+gradient = SubResource("Gradient_jq8ue")
+width = 1
+
+[sub_resource type="Curve" id="Curve_ivy22"]
+_data = [Vector2(0, 0.68421), 0.0, 0.0, 0, 0, Vector2(0.456522, 0.915789), 0.0, 0.0, 0, 0, Vector2(0.833333, 0.873684), 0.0, 0.0, 0, 0, Vector2(0.992754, 0.568421), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Gradient" id="Gradient_xkj7w"]
+offsets = PackedFloat32Array(0.00934579, 0.168224, 0.242991, 0.401869, 0.53271, 0.897196, 0.971963)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0, 1, 0.74902, 0, 1, 1, 0.639216, 0.258824, 1, 1, 0.454, 0.22, 1, 1, 0.290196, 0.121569, 1, 1, 0.478431, 0.258824, 0)
+
+[node name="Torch" type="Sprite2D"]
+texture_filter = 1
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_bg5cn")
+script = ExtResource("2_r8lxn")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -4)
+scale = Vector2(1.40625, 1.40625)
+texture = SubResource("GradientTexture2D_lug4d")
+
+[node name="GPUParticles2D2" type="CPUParticles2D" parent="."]
+amount = 10
+lifetime = 7.0
+preprocess = 5.0
+texture = SubResource("GradientTexture1D_s4k2i")
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, 1)
+initial_velocity_min = 5.0
+initial_velocity_max = 7.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_ivy22")
+color_ramp = SubResource("Gradient_xkj7w")

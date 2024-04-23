@@ -1,5 +1,5 @@
 extends CharacterBody2D
-@onready var player_scene = load("res://Scenes/Character + Items/player.tscn")
+@onready var player_scene = load("res://Scenes/Character/player.tscn")
 @onready var my_type = "player"
 
 @export var init_speed : int = 90
@@ -11,7 +11,7 @@ extends CharacterBody2D
 @onready var gravity = init_gravity * scale.x / 1.8
 
 @onready var camera_transition = $"../../Camera Transition"
-
+@onready var camera = get_node("Camera2D")
 @onready var anim_tree = get_node("AnimationTree")
 
 var darkness : float = 70
@@ -30,14 +30,33 @@ var connecting
 
 var available_splits
 
+@export var camera_active = true
+
 func _ready():
+	var tilemap
+	if get_tree().current_scene.name == "Menu":
+		tilemap = get_parent().get_node("TileMap")
+	else:
+		tilemap = $"../../TileMap"
+		
+	var tilemap_rect = tilemap.get_used_rect()
+	var tilemap_cell_size = 16
+	
+	camera.limit_left = tilemap_rect.position.x * tilemap_cell_size
+	camera.limit_right = tilemap_rect.end.x * tilemap_cell_size
+	camera.limit_top = tilemap_rect.position.y * tilemap_cell_size
+	camera.limit_bottom = tilemap_rect.end.y * tilemap_cell_size
+	
 	if not Global.active_player:
 		Global.active_player = self
 		available_splits = 0
 		split = false
 		connecting = false
 	Global.global_player_activaion.connect(global_activation)
-	connect("transition_signal", camera_transition.transition, 3)
+	if camera_active:
+		connect("transition_signal", camera_transition.transition, 3)
+	else:
+		get_node("Camera2D").enabled = false
 
 var floor = false
 var direction
@@ -235,10 +254,21 @@ func connect_area_entered(body):
 		slime_split(body)
 			
 	if body.my_type == "flag":
-		if snappedf(body.scale[0], 0.1) == snappedf(Global.max_size[Global.levels.find(get_tree())], 0.1):
-			if Global.levels.find(get_tree()) + 1 <= Global.levels.size():
-				var next_level = Global.levels[Global.levels.find(get_tree()) + 1]
-			print("Done")
+		if self.available_splits == Global.max_size[Global.levels_name.find(get_tree().current_scene.name)]:
+			if Global.levels_name.find(get_tree().current_scene.name) + 1 < Global.levels.size():
+				var level_name = get_tree().current_scene.name
+				var next_level = Global.levels[Global.levels_name.find(get_tree().current_scene.name) + 1]
+				if level_name == Global.last_tutorial:
+					Global.game_data["tutorial"] = true
+				Global.level_end = true
+				Global.game_data["last_level"] += 1
+				await  get_tree().create_timer(0.5).timeout
+				get_tree().change_scene_to_file(next_level)
+			else:
+				Global.level_end = true
+				Global.game_data["last_level"] = 0
+				await  get_tree().create_timer(0.5).timeout
+				get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 
 
 func connect_area_exited(body):

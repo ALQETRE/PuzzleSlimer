@@ -7,6 +7,10 @@ func transition(player1, player2, time):
 	var cam1 = player1.get_node("Camera2D")
 	var cam2 = player2.get_node("Camera2D")
 	zoom = cam1.zoom
+	limit_left = cam1.limit_left
+	limit_right = cam1.limit_right
+	limit_top = cam1.limit_top
+	limit_bottom = cam1.limit_bottom
 	offset = player1.position
 	player1.split = true
 	player2.split = true
@@ -25,7 +29,10 @@ func transition(player1, player2, time):
 	tween.tween_property(self, "zoom", end_zoom, time)
 	
 	await get_tree().create_timer(time).timeout
-	
+	limit_left = cam2.limit_left
+	limit_right = cam2.limit_right
+	limit_top = cam2.limit_top
+	limit_bottom = cam2.limit_bottom
 	cam2.enabled = true
 	enabled = false
 	
