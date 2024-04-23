@@ -28,7 +28,7 @@ func load_game():
 var game_data = {}
 
 var def_data = {
-	"tutorial": true,
+	"tutorial": false,
 	"last_level": 0
 }
 
