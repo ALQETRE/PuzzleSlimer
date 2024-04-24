@@ -38,5 +38,5 @@ func _notification(what):
 		get_tree().quit()
 	
 func _ready():
-	save(def_data)
+	#save(def_data)
 	game_data = load_game()
