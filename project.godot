@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="Puzzle Slimer"
+config/tags=PackedStringArray("2d", "pixel_art", "platfomer", "puzzle")
 run/main_scene="res://Scenes/menu.tscn"
-config/features=PackedStringArray("4.1", "Mobile")
+config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
